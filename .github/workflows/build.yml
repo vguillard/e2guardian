@@ -1,6 +1,4 @@
-# This is a basic workflow to help you get started with Actions
-
-name: CI
+name: TEST
 
 # Controls when the action will run. 
 on:
@@ -27,6 +25,6 @@ jobs:
 
       # Runs a single command using the runners shell
       - name: Build docker image
-        run: docker build . -t vguillard/e2guardian
+        run: docker build .
 
       
