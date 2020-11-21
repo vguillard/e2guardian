@@ -11,7 +11,8 @@ RUN \
   apk add --update --no-cache curl gcc libc-dev argp-standalone linux-headers && \
   apk add --update --no-cache automake make autoconf g++ zlib-dev openssl openssl-dev
 RUN \
-  curl -O -L https://github.com/e2guardian/e2guardian/archive/v5.3.4.tar.gz && \
+  curl -O -s -L https://github.com/e2guardian/e2guardian/archive/v5.3.4.tar.gz && \
+  curl -O http://dsi.ut-capitole.fr/blacklists/download/blacklists_for_dansguardian.tar.gz && tar xzf blacklists_for_dansguardian.tar.gz && \
   tar xzf v5.3.4.tar.gz 
 RUN \
   cd e2guardian-5.3.4/ && \
@@ -21,7 +22,10 @@ RUN \
 RUN \
   echo '######## Enable dockermode ########' && \
   sed -i "s|^.\{0,1\}dockermode = off$|dockermode = on|g" /app/etc/e2guardian.conf  && \
- echo '.Include</app/etc/lists/blacklists/adult/domains>\n\
+  echo '######## Extract blacklist ########' && \
+  tar xzf blacklists_for_dansguardian.tar.gz -C /app/etc/lists/ && \
+  echo '######## Use some blacklists #####' && \
+  echo '.Include</app/etc/lists/blacklists/adult/domains>\n\
 .Include</app/etc/lists/blacklists/aggressive/domain>\n\
 .Include</app/etc/lists/blacklists/drugs/domains>\n\
 .Include</app/etc/lists/blacklists/gambling/domains>\n\
