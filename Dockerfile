@@ -11,11 +11,11 @@ RUN \
   apk add --update --no-cache curl gcc libc-dev argp-standalone linux-headers && \
   apk add --update --no-cache automake make autoconf g++ zlib-dev openssl openssl-dev
 RUN \
-  curl -O -s -L https://github.com/e2guardian/e2guardian/archive/v5.3.4.tar.gz && \
+  curl -O -s -L https://github.com/e2guardian/e2guardian/archive/v5.3.5.tar.gz && \
   curl -O http://dsi.ut-capitole.fr/blacklists/download/blacklists_for_dansguardian.tar.gz && tar xzf blacklists_for_dansguardian.tar.gz && \
-  tar xzf v5.3.4.tar.gz 
+  tar xzf v5.3.5.tar.gz 
 RUN \
-  cd e2guardian-5.3.4/ && \
+  cd e2guardian-5.3.5/ && \
   ./autogen.sh && \
   ./configure  '--prefix=/app/' '--sysconfdir=/app/' '--with-sysconfsubdir=etc' '--with-proxyuser=e2guardian' '--with-proxygroup=e2guardian'  '--enable-clamd=yes'  '--localstatedir=/var' '--enable-icap=no' '--enable-commandline=yes' '--enable-email=no' '--enable-ntlm=no' '--mandir=${prefix}/share/man' '--infodir=${prefix}/share/info' '--enable-pcre=no' '--enable-sslmitm=yes' 'CPPFLAGS=-mno-sse2 -g -O2' && \
   make && make install
@@ -33,7 +33,9 @@ RUN \
 .Include</app/etc/lists/blacklists/violence/domains>\n\
 .Include</app/etc/lists/blacklists/virusinfected/domains>\n\
 .Include</app/etc/lists/blacklists/warez/domains>\n'\
-  >/app/etc/lists/bannedsitelist 
+  >/app/etc/lists/bannedsitelist
+
+COPY conf/lists/* /app/etc/lists/
 
 COPY app/sbin/* /app/sbin/
 
